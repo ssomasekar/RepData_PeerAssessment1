@@ -1,0 +1,129 @@
+This is a R markdown file for peer assesment 1.
+
+Read the data
+```{r}
+walk <- read.csv("activity.csv")
+```
+
+Declare Variables.
+
+```{r}
+SumSet <- numeric()
+AvgSet <- numeric()
+MedSet <- numeric()
+minSet <- numeric()
+SumSet1 <- numeric()
+AvgSet1 <- numeric()
+MedSet1 <- numeric()
+daySet <- character()
+```
+
+Question 1 - What is mean total number of steps taken per day?
+
+```{r}
+for(day in 0:60)
+{
+days <- as.Date("2012-10-01") + day
+daywalk <- subset (walk, date == as.character(days))
+Dayna <- na.omit(daywalk[[1]])
+DaySum <- sum(Dayna)
+SumSet = append(SumSet, DaySum, after=length(SumSet))
+DayAvg <- mean(Dayna)
+AvgSet = append(AvgSet, DayAvg, after=length(AvgSet))
+DayMed <- median(Dayna)
+MedSet = append(MedSet, DayMed, after=length(MedSet))
+}
+hist(SumSet)
+```
+Vector showing the mean number of steps taken per day
+```{r}
+print(AvgSet)
+```
+Vector showing the median number of steps taken per day
+```{r}
+print(MedSet)
+```
+
+Question 2 - What is the average daily activity pattern?
+```{r}
+for (i in seq(0,2355,5))
+{
+times <- subset(walk,interval == i)
+minsteps <- na.omit(times[[1]])
+minsteps1 <- sum(minsteps)
+minSet = append(minSet, minsteps1, after=length(minSet))
+if(minsteps1 == max(minSet))
+{
+maxtime <- i} 
+}
+tsSet <- ts(minSet)
+plot(tsSet, type="l")
+```
+What is the maximum number of steps taken?
+```{r}
+maxvalue <- max(minSet)
+print(maxvalue)
+```
+What is the time point when maximum number of steps were taken?
+
+```{r}
+print(maxtime)
+```
+
+Question 3 - Imput missing value.
+I replaced the missing value with "1" and then calculated the mean, median and sum of number of steps taken each day.
+```{r}
+walk1 <- walk
+walk1[is.na(walk1)]<-1
+for(day1 in 0:60)
+{
+days1 <- as.Date("2012-10-01") + day1
+daywalk1 <- subset (walk1, date == as.character(days1))
+DaySum1 <- sum(daywalk1[[1]])
+SumSet1 = append(SumSet1, DaySum1, after=length(SumSet1))
+DayAvg1 <- mean(daywalk1[[1]])
+AvgSet1 = append(AvgSet1, DayAvg1, after=length(AvgSet1))
+DayMed1 <- median(daywalk1[[1]])
+MedSet1 = append(MedSet1, DayMed1, after=length(MedSet1))
+}
+hist(SumSet1)
+```
+Vector showing the mean number of steps taken per day
+```{r}
+print(AvgSet1)
+```
+Vector showing the median number of steps taken per day
+```{r}
+print(MedSet1)
+```
+Question 4 - Are there differences in activity patterns between weekdays and weekends?
+
+for(day1 in 0:60)
+{
+days1 <- as.Date("2012-10-01") + day1
+daytype <- weekdays(days1)
+if(daytype == c("Monday","Tuesday", "Wednesday", "Thursday", "Friday"))
+{daytype1 <- 0}
+else if(daytype == c("Saturday","Sunday"))
+{daytype1 <- 1}
+daySet <- append(daySet,daytype1,after = length(daySet))
+}
+daytype.f <- factor(daySet, labels = c("Weekday","Weekend"))
+
+
+
+for (i in seq(0,2355,5))
+{
+times <- subset(walk1,interval == i)
+minsteps <- na.omit(times[[1]])
+minsteps1 <- sum(minsteps)
+minSet = append(minSet, minsteps1, after=length(minSet))
+if(minsteps1 == max(minSet))
+{
+maxtime <- i} 
+}
+maxvalue <- max(minSet)
+print(maxvalue)
+print(maxtime)
+tsSet <- ts(minSet)
+plot(tsSet, type="l")
